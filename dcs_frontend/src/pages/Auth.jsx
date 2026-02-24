@@ -45,14 +45,15 @@ function Auth({ register }) {
     if(!email||!password)
     {
       alert("Please fill the form")
+      return
     }
     else{
       try{
         const response = await loginUserAPI({email,password})
         console.log(response)
-        sessionStorage.setItem("token",response.data.token)
         if(response.status==200)
         {
+          sessionStorage.setItem("token",response.data.token)
           toast.success(response.data.message, {
             position: "top-center",
             autoClose: 4000,

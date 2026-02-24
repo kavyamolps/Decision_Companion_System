@@ -1,0 +1,111 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f6f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #1e293b;
+  color: white;
+}
+
+.logo {
+  margin: 0;
+}
+
+.logout-btn {
+  background-color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626;
+}
+
+.container {
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.main-heading {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #1e293b;
+}
+
+.section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section label {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.section input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.score-section {
+  margin-top: 40px;
+}
+
+.option-block {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.score-input {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.score-input input {
+  width: 100px;
+}
+
+.option-title {
+  color: #027773;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.submit-btn {
+  margin-top: 30px;
+  padding: 12px 25px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  width: 150px; 
+}
+
+.submit-btn:hover {
+  background-color: #1e40af;
+}
+
+/* For small devices */
+@media (max-width: 768px) {
+  .submit-btn {
+    width: 100%;
+  }
+}
