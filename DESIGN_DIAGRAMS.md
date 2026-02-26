@@ -10,3 +10,5 @@
 
 ![DFD_LEVEL2](https://github.com/user-attachments/assets/45719810-fe22-47ea-b34d-251dd2d59b75)
 
+#### DECISION LOGIC DIAGRAM
+![Decision_Logic_Diagram](https://github.com/user-attachments/assets/1091332b-d00f-45b7-b810-a7fd83c52888)
