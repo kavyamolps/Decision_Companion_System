@@ -5,6 +5,7 @@ import Auth from './pages/Auth'
 import { useEffect, useState } from 'react'
 import Landingpage from './pages/Landingpage'
 import Home from './pages/Home'
+import Result from './pages/Result'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path='login' element={<Auth />} />
         <Route path='register' element={<Auth register/>} />
         <Route path='home' element={<Home/>} />
+        <Route path='result' element={<Result/>}/>
       </Routes>
     </>
   )

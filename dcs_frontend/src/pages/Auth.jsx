@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import './Auth.css'
-import { registerUserAPI, loginUserAPI } from '../services/allAPIs';
+import { registerUserAPI, loginUserAPI, googleLoginUserAPI } from '../services/allAPIs';
 import { ToastContainer, toast ,Bounce } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 function Auth({ register }) {
   console.log(register);
 
@@ -54,6 +55,7 @@ function Auth({ register }) {
         if(response.status==200)
         {
           sessionStorage.setItem("token",response.data.token)
+          localStorage.setItem("token",response.data.token)
           toast.success(response.data.message, {
             position: "top-center",
             autoClose: 4000,
@@ -90,7 +92,29 @@ function Auth({ register }) {
       }
     }
   }
+  const handleGoogleLogin = async(credentialResponse)=>{
+    // console.log("google login")
+    const decode = jwtDecode(credentialResponse.credential)
+    console.log(decode)
 
+    try{
+      const response=await googleLoginUserAPI({username:decode.name,email:decode.email,password:"googlepswd",profile:decode.picture})
+      console.log(response)
+      if(response.status==200)
+      {
+        sessionStorage.setItem("token",response.data.token)
+        sessionStorage.setItem("userDetails",JSON.stringify(response.data.existingUser))
+        navigate("/home")
+      }
+      else
+      {
+        console.log(response.data.message)
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
   
 
 
@@ -126,7 +150,18 @@ function Auth({ register }) {
               </div>
             </div>
             {
-              register ? <div><Button onClick={handleRegister} className='!text-olive-50 w-full' type="button">SignUp</Button><p className='mt-3 text-center' style={{color:"#6a6a6a",fontSize:"14px"}}>Already have an account ? <a href="/login" style={{ textDecoration: "underline",color:"#0b6a67" }}>login</a></p></div> : <div><Button className='!text-olive-50 w-full' type="button" onClick={handleLogin}>SignIn</Button>
+              register ? <div><Button onClick={handleRegister} className='!text-olive-50 w-full' type="button">SignUp</Button><p className='mt-3 text-center' style={{color:"#6a6a6a",fontSize:"14px"}}>Already have an account ? <a href="/login" style={{ textDecoration: "underline",color:"#0b6a67" }}>login</a></p></div> : <div><Button className='!text-olive-50 w-full mb-2' type="button" onClick={handleLogin}>SignIn</Button>
+              
+              <GoogleLogin 
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+    handleGoogleLogin(credentialResponse)
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>
+
               <p className='mt-3 text-center' style={{color:"#6a6a6a",fontSize:"14px"}}>Don't have an account ? <a href="/register" style={{ textDecoration: "underline",color:"#0b6a67" }}>Sign Up</a></p></div>
               
             }

@@ -4,10 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import "flowbite"
+import { GoogleOAuthProvider } from '@react-oauth/google';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENTID}>
       <App />
+    </GoogleOAuthProvider>;
     </BrowserRouter>
   
   </StrictMode>,

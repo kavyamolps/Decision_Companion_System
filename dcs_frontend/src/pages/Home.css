@@ -2,6 +2,7 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f4f6f9;
+  cursor: pointer;
 }
 
 .header {
@@ -108,4 +109,17 @@ body {
   .submit-btn {
     width: 100%;
   }
+}
+.section input,
+.section select {
+  height: 50px; 
+  padding: 0 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  box-sizing: border-box;
+}
+.section select {
+  appearance: none;
 }

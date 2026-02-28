@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import "./Home.css";
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [item, setItem] = useState("");
@@ -10,19 +11,34 @@ function Home() {
   const [criteria, setCriteria] = useState([]);
   const [options, setOptions] = useState([]);
   const [scores, setScores] = useState({});
-
+  const [decisionDetails,setDecisionDetails]=useState({
+    item,
+    criteria,
+    options,
+    scores
+  })
+  const navigate = useNavigate();
+  
   // Generate Criteria Inputs
   const handleCriteriaChange = (value) => {
     const count = parseInt(value) || 0;
     setNumCriteria(count);
 
     const newCriteria = Array.from({ length: count }, (_, i) => ({
-      id: i,
-      name: ""
-    }));
+    id: i,
+    name: "",
+    weight: "",
+    type: "benefit"
+  }));
 
     setCriteria(newCriteria);
   };
+  const updateCriterionType = (index, value) => {
+    const updated = [...criteria];
+    updated[index].type = value;
+    setCriteria(updated);
+  };
+
 
   // Generate Options Inputs
   const handleOptionsChange = (value) => {
@@ -44,6 +60,18 @@ function Home() {
     setCriteria(updated);
   };
 
+  // Update Criterion Weight
+  const updateCriterionWeight = (index, value) => {
+  const updated = [...criteria];
+  updated[index].weight = value;
+  setCriteria(updated);
+};
+
+const totalWeight = criteria.reduce(
+  (sum, c) => sum + (parseFloat(c.weight) || 0),
+  0
+);
+
   // Update Option Name
   const updateOptionName = (index, value) => {
     const updated = [...options];
@@ -62,7 +90,60 @@ function Home() {
     newScores[optionIndex][criterionIndex] = value;
     setScores(newScores);
   };
-  const handleSubmit = () => {
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/login", { replace: true });
+};
+
+  const handleSubmit = async () => {
+
+  if (!item.trim()) {
+    alert("Item is required.");
+    return;
+  }
+
+  if (criteria.length === 0) {
+    alert("Please enter number of criteria.");
+    return;
+  }
+
+  for (let i = 0; i < criteria.length; i++) {
+    if (!criteria[i].name.trim()) {
+      alert(`Criterion ${i + 1} name is required.`);
+      return;
+    }
+    if (criteria[i].weight === "" || isNaN(criteria[i].weight)) {
+      alert(`Weight for Criterion ${i + 1} is required.`);
+      return;
+    }
+  }
+
+  if (totalWeight !== 100) {
+    alert("Total weight must equal 100%.");
+    return;
+  }
+
+  if (options.length === 0) {
+    alert("Please enter number of options.");
+    return;
+  }
+
+  for (let i = 0; i < options.length; i++) {
+    if (!options[i].name.trim()) {
+      alert(`Option ${i + 1} name is required.`);
+      return;
+    }
+  }
+
+  for (let o = 0; o < options.length; o++) {
+    for (let c = 0; c < criteria.length; c++) {
+      if (!scores[o] || scores[o][c] === undefined || scores[o][c] === "") {
+        alert("All score fields are required!");
+        return;
+      }
+    }
+  }
+
   const data = {
     item,
     criteria,
@@ -70,20 +151,49 @@ function Home() {
     scores
   };
 
-  console.log("Submitted Data:", data);
-  alert("Decision Data Submitted Successfully!");
+  try {
+    const response = await fetch("http://localhost:3000/api/add_decision", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}` // if using JWT
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Decision saved successfully!");
+      console.log(result);
+      navigate("/result")
+
+      // Optional: Reset form after saving
+      setItem("");
+      setCriteria([]);
+      setOptions([]);
+      setScores({});
+      setNumCriteria(0);
+      setNumOptions(0);
+    } else {
+      alert("Failed to save decision");
+      console.error(result);
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Server error");
+  }
 };
 
   return (
     <div className="min-h-screen">
-      {/* HEADER */}
       <header className="header">
         <h2 className="logo">Decision Companion System</h2>
-        <button className="logout-btn">Logout</button>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </header>
 
       <div className="container">
-        {/* Catchy Heading */}
         <h1 className="main-heading">
           Make Smarter Decisions with Confidence
         </h1>
@@ -105,21 +215,53 @@ function Home() {
           <input
             type="number"
             min="0"
+            value={numCriteria}
             onChange={(e) => handleCriteriaChange(e.target.value)}
           />
         </div>
 
         {/* Criteria Inputs */}
         {criteria.map((c, index) => (
-          <div key={index} className="section">
-            <label>Enter Name of Criterion {index + 1}</label>
-            <input
-              type="text"
-              value={c.name}
-              onChange={(e) => updateCriterionName(index, e.target.value)}
-            />
-          </div>
-        ))}
+  <div key={index} className="section">
+    <label>Criterion {index + 1}</label>
+
+    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      
+      {/* Criterion Name */}
+      <input
+        type="text"
+        placeholder="Enter criterion name"
+        value={c.name}
+        onChange={(e) => updateCriterionName(index, e.target.value)}
+        style={{ flex: 2 }}
+      />
+
+      {/* Weight */}
+      <input
+        type="number"
+        min="0"
+        max="100"
+        placeholder="Weight (in %)"
+        value={c.weight}
+        onChange={(e) => updateCriterionWeight(index, e.target.value)}
+        style={{ flex: 1 }}
+      />
+
+      {/* NEW: Type Dropdown */}
+      <select
+        value={c.type}
+        onChange={(e) => updateCriterionType(index, e.target.value)}
+        style={{ flex: 1, padding: "6px" }}
+      >
+        <option value="benefit">Higher is better</option>
+        <option value="cost">Lower is better</option>
+      </select>
+
+    </div>
+  </div>
+))}
+
+
 
         {/* Number of Options */}
         <div className="section">
@@ -127,6 +269,7 @@ function Home() {
           <input
             type="number"
             min="0"
+            value={numOptions}
             onChange={(e) => handleOptionsChange(e.target.value)}
           />
         </div>

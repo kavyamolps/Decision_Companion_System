@@ -12,3 +12,17 @@ export const registerUserAPI = async(reqBody)=>{
 export const loginUserAPI = async(reqBody)=>{
     return await commonAPI('POST',`${serverURL}/api/login`,reqBody,{})
 }
+//2 Google Login User
+export const googleLoginUserAPI = async(reqBody)=>{
+    return await commonAPI('POST',`${serverURL}/api/google-login`,reqBody,{})
+}
+
+
+//3 Add Decision API
+export const addDecisionAPI = async(reqBody,reqHeader)=>{
+    return await commonAPI('POST',`${serverURL}/api/add_decision`,reqBody,reqHeader)
+}
+
+export const getLatestDecisionAPI = async (reqHeader) => {
+    return await commonAPI('GET',`${serverURL}/api/get_latest_decision`,{},reqHeader)
+}
