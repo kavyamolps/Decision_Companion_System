@@ -12,3 +12,6 @@
 
 #### DECISION LOGIC DIAGRAM
 ![Decision_Logic_Diagram](https://github.com/user-attachments/assets/1091332b-d00f-45b7-b810-a7fd83c52888)
+
+#### COMPONENT DIAGRAM
+![Component_Diagram](https://github.com/user-attachments/assets/79ef468b-ec09-4689-825b-8fc84e4e914d)
