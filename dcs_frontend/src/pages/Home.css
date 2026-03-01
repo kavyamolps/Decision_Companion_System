@@ -185,3 +185,78 @@ body {
   font-size: 18px;
   cursor: pointer;
 }
+
+
+/* ========================= */
+/* 📱 MOBILE RESPONSIVENESS  */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  /* Reduce container padding */
+  .container {
+    padding: 20px;
+  }
+
+  /* Header stacking */
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .headersect {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Criteria row → stack vertically */
+  .section > div {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* First input (Criterion Name) */
+  .section > div input[type="text"] {
+    flex: 2;
+    min-width: 0;
+  }
+
+  /* Second input (Weight) */
+  .section > div input[type="number"] {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Dropdown should go to next line */
+  .section > div select {
+    flex: 100%;
+  }
+
+  /* Score input layout stack */
+  .score-input {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .score-input input {
+    width: 100%;
+  }
+
+  /* Submit button full width */
+  .submit-btn {
+    width: 100%;
+  }
+
+  /* Sidebar full width on mobile */
+  .sidebar {
+    width: 100%;
+    right: -100%;
+  }
+
+  .sidebar.active {
+    right: 0;
+  }
+}
