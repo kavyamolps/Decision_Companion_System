@@ -18,4 +18,6 @@ route.get('/api/get_latest_decision', jwtMiddleware, decisionController.getLates
 
 route.put('/api/update_decision/:id', jwtMiddleware, decisionController.updateDecision)
 
+route.get('/api/get_user_decisions', jwtMiddleware, decisionController.getUserDecisions)
+
 module.exports = route

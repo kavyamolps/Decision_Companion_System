@@ -162,23 +162,35 @@ exports.updateDecision = async (req, res) => {
     const winner = results[0]?.name;
 
     const explanation = `${winner} ranked highest because it achieved the best weighted score based on your criteria.`;
-    
-    const updatedDecision = await Decision.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.body,
-        finalScores: results,
-        ranking: results,
-        winner,
-        explanation
-      },
-      { new: true }
-    );
+    const userMail=req.payload
+    const updatedDecision = await Decision.findOneAndUpdate(
+  { _id: req.params.id, userMail },
+  {
+    ...req.body,
+    finalScores: results,
+    ranking: results,
+    winner,
+    explanation
+  },
+  { new: true }
+);
 
     res.status(200).json(updatedDecision);
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Update failed" });
+  }
+};
+exports.getUserDecisions = async (req, res) => {
+  try {
+    const userMail = req.payload; // coming from JWT middleware
+
+    const decisions = await Decision.find({ userMail })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(decisions);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching decisions" });
   }
 };

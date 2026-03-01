@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./Home.css";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from "react";
+import { FaHistory } from "react-icons/fa";
 
 function Home() {
   const [item, setItem] = useState("");
@@ -20,7 +21,32 @@ function Home() {
   })
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const [historyData, setHistoryData] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const handleHistory = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/api/get_user_decisions", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setHistoryData(data);
+      setShowSidebar(true);
+    } else {
+      alert("Failed to fetch history");
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+const closeSidebar = () => {
+  setShowSidebar(false);
+};
   // Generate Criteria Inputs
   const handleCriteriaChange = (value) => {
     const count = parseInt(value) || 0;
@@ -214,7 +240,10 @@ useEffect(() => {
     <div className="min-h-screen">
       <header className="header">
         <h2 className="logo">Decision Companion System</h2>
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        <div className="headersect">
+          <button className="history-btn" onClick={handleHistory}>History <FaHistory/></button>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        </div>
       </header>
 
       <div className="container">
@@ -344,6 +373,31 @@ useEffect(() => {
         <button className="submit-btn" onClick={handleSubmit}>
           Submit
         </button>
+      {/* Overlay */}
+{showSidebar && <div className="overlay" onClick={closeSidebar}></div>}
+
+{/* Sidebar */}
+<div className={`sidebar ${showSidebar ? "active" : ""}`}>
+  <div className="sidebar-header">
+    <h2 style={{color:"rgba(8, 40, 40)"}}>Decision History</h2>
+    <button onClick={closeSidebar}>✖</button>
+  </div>
+
+  <div className="sidebar-content">
+    {/* <p>No history yet</p> */}
+    {historyData.length === 0 ? (
+  <p>No history yet</p>
+) : (
+  historyData.map((decision, index) => (
+    <div key={index} className="history-item">
+      <h4>{decision.item}</h4>
+      <p>Winner: {decision.winner}</p>
+      <br />
+    </div>
+  ))
+)}
+  </div>
+</div>
       </div>
     </div>
   );
