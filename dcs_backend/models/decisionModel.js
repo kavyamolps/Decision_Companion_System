@@ -29,6 +29,27 @@ const decisionSchema = new mongoose.Schema({
     userMail: {
         type: String,
         required: true
+    },
+    finalScores: [
+        {
+            option: String,
+            score: Number
+        }
+    ],
+
+    ranking: [
+        {
+            option: String,
+            score: Number
+        }
+    ],
+
+    winner: {
+        type: String
+    },
+
+    explanation: {
+        type: String
     }
 
 });

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getLatestDecisionAPI } from '../services/allAPIs';
+import { useNavigate } from "react-router-dom";
+import { MdOutlineEdit } from "react-icons/md";
 import './Result.css';
 
 function Result() {
@@ -7,6 +9,8 @@ function Result() {
   const [decision, setDecision] = useState(null);
   const [results, setResults] = useState([]);
   const [explanation, setExplanation] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDecision();
@@ -123,10 +127,25 @@ function Result() {
 
     setExplanation(explanations);
   };
+  const handleEdit = () => {
+  navigate("/home", { state: { decision } });   // Go back to form (you can later pass data if needed)
+};
+
+const handleNewDecision = () => {
+  navigate("/home", { state: null, replace: true });
+};
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/login", { replace: true });
+};
 
   return (
     <div className="result-container min-h-screen">
-      <h1 className="result-title">Decision Results</h1>
+      <header className="header">
+        <h2 className="logo">Decision Companion System</h2>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      </header>
+      <h1 className="result-title mt-4">Decision Results</h1>
 
       {results.length > 0 ? (
         <>
@@ -156,6 +175,15 @@ function Result() {
       ) : (
         <p className="loading-text">Calculating results...</p>
       )}
+<div className="result-actions">
+  <button className="edit-btn" onClick={handleEdit}>
+    <MdOutlineEdit />Edit Decision
+  </button>
+
+  <button className="new-btn" onClick={handleNewDecision}>
+    New Decision
+  </button>
+</div>
     </div>
   );
 }

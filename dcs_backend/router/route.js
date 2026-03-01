@@ -16,4 +16,6 @@ route.post('/api/add_decision',jwtMiddleware,decisionController.createDecision)
 
 route.get('/api/get_latest_decision', jwtMiddleware, decisionController.getLatestDecision);
 
+route.put('/api/update_decision/:id', jwtMiddleware, decisionController.updateDecision)
+
 module.exports = route

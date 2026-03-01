@@ -1,5 +1,33 @@
+body{
+  margin: 0;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #1e293b;
+  color: white;
+}
+
+.logo {
+  margin: 0;
+}
+
+.logout-btn {
+  background-color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626;
+}
+
 .result-container {
-  padding: 40px 20px;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
 }
@@ -110,3 +138,46 @@
 #explaining{
     font-weight: 700;
 }
+
+.result-actions {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.edit-btn,
+.new-btn {
+  padding: 10px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #027773;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn:hover {
+  background-color: #025e5a;
+}
+
+.new-btn {
+  background-color:#c6f6f4!important;
+  color: #025e5a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.new-btn:hover {
+  background-color: #027773;
+}
+
+

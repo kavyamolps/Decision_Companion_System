@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import "./Home.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
 
 function Home() {
   const [item, setItem] = useState("");
@@ -18,6 +19,7 @@ function Home() {
     scores
   })
   const navigate = useNavigate();
+  const location = useLocation();
   
   // Generate Criteria Inputs
   const handleCriteriaChange = (value) => {
@@ -152,8 +154,15 @@ const totalWeight = criteria.reduce(
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/add_decision", {
-      method: "POST",
+    const isEditing = location.state?.decision?._id;
+    const url = isEditing
+    ? `http://localhost:3000/api/update_decision/${location.state.decision._id}`
+    : "http://localhost:3000/api/add_decision";
+
+    const method = isEditing ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}` // if using JWT
@@ -164,9 +173,9 @@ const totalWeight = criteria.reduce(
     const result = await response.json();
 
     if (response.ok) {
-      alert("Decision saved successfully!");
+      alert(isEditing ? "Decision updated successfully!" : "Decision saved successfully!");
       console.log(result);
-      navigate("/result")
+      navigate("/result", { replace: true })
 
       // Optional: Reset form after saving
       setItem("");
@@ -177,6 +186,7 @@ const totalWeight = criteria.reduce(
       setNumOptions(0);
     } else {
       alert("Failed to save decision");
+      alert("Session expired or invalid access. Please login again to continue.");
       console.error(result);
     }
 
@@ -185,6 +195,20 @@ const totalWeight = criteria.reduce(
     alert("Server error");
   }
 };
+useEffect(() => {
+  if (location.state?.decision) {
+
+    const existing = location.state.decision;
+
+    setItem(existing.item);
+    setCriteria(existing.criteria);
+    setOptions(existing.options);
+    setScores(existing.scores);
+
+    setNumCriteria(existing.criteria.length);
+    setNumOptions(existing.options.length);
+  }
+}, [location.state]);
 
   return (
     <div className="min-h-screen">
@@ -302,6 +326,7 @@ const totalWeight = criteria.reduce(
                     </label>
                     <input
                       type="number"
+                      value={scores[optionIndex]?.[criterionIndex] || ""}
                       onChange={(e) =>
                         updateScore(
                           optionIndex,

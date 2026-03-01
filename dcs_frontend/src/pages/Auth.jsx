@@ -104,6 +104,9 @@ function Auth({ register }) {
       {
         sessionStorage.setItem("token",response.data.token)
         sessionStorage.setItem("userDetails",JSON.stringify(response.data.existingUser))
+        localStorage.setItem("token",response.data.token)
+        localStorage.setItem("userDetails",JSON.stringify(response.data.existingUser))
+
         navigate("/home")
       }
       else
