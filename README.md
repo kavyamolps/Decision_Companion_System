@@ -3,6 +3,15 @@
 The Decision Companion System helps users make better decisions by allowing them to compare multiple options based on defined criteria and assigned importance weights. It evaluates each option using a structured and explainable scoring method, ranks the alternatives, and clearly explains why a particular option is recommended.
 #### Live Link : https://decision-companion-system-frontend.onrender.com/
 
+
+
+
+##### Project Demo Video :
+
+https://github.com/user-attachments/assets/8e7f6405-979f-4583-86bc-aeaa2a54b5ee
+
+
+
 ### Understanding of the problem
 
 Many people struggle to make effective decisions when multiple options and factors are involved, often relying on intuition rather than structured analysis, which can lead to confusion or poor outcomes. The problem therefore requires designing and building a Decision Companion System that helps users make structured and rational decisions by evaluating multiple options against clearly defined criteria with varying levels of importance. Instead of a hard-coded or static comparison, the system must dynamically process user inputs, allow users to define criteria and assign weights, compare alternatives, and automatically calculate a ranked recommendation using logical evaluation methods such as weighted scoring. A key requirement is explainability—the reasoning behind the ranking must be transparent and understandable, ensuring the system provides a clear, logical, and non–black-box approach to decision-making.
